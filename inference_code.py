@@ -5,11 +5,9 @@ import sys
 def install(package):
     subprocess.call([sys.executable, "-m", "pip", "install", package])
 
-install('pandas')
-install('numpy')
-install('opencv-python')
+
 install('ultralytics')
-install('matplotlib')
+
 
 from ultralytics import YOLO
 import matplotlib.pyplot as plt
@@ -17,8 +15,7 @@ import cv2
 import numpy as np
 import os
 from tqdm import tqdm
-import pandas as pd
-import random
+
 
 # Input:
 test_data_folder = r'C:\Users\skmmg\Downloads\Test_data'
