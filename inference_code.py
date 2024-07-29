@@ -6,7 +6,7 @@ def install(package):
     subprocess.call([sys.executable, "-m", "pip", "install", package])
 
 
-install('ultralytics')
+install('ultralytics==8.2.51')
 
 
 from ultralytics import YOLO
@@ -56,14 +56,14 @@ def combine_masks(masks):
    return prediction
 
 def remove_small_overlapping_masks(mask_cpu, overlap_threshold = 0.8):
-
+    eps = 0.000001
     masks_size = [mask_cpu[i,:,:].sum() for i in range(mask_cpu.shape[0])]
     overlap_matrix = np.zeros((mask_cpu.shape[0],mask_cpu.shape[0] ))
     masks_to_remove = []
 
     for i in range(mask_cpu.shape[0]):
         for j in range(mask_cpu.shape[0]):
-            overlap_matrix[i,j] = (mask_cpu[i]*mask_cpu[j]).sum()/ mask_cpu[i].sum()
+            overlap_matrix[i,j] = ((mask_cpu[i]*mask_cpu[j]).sum()+eps)/ (mask_cpu[i].sum()+eps)
             if i==j:
                 overlap_matrix[i,j]  = 0
 
