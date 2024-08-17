@@ -49,10 +49,15 @@ def combine_masks(masks):
    
   # Create a blank image
    prediction = np.zeros(masks.shape[1:])
+   counter = 1
    for i in range(masks.shape[0]):
     negative_pred = (1 - prediction.astype(bool)).astype(bool)
     points_to_add = negative_pred*(masks[i] > 0)
-    prediction = prediction+ (i+1) * points_to_add
+
+    if masks[i].sum()>0:
+        prediction = prediction+ counter * points_to_add
+        counter = counter + 1
+        
    return prediction
 
 def remove_small_overlapping_masks(mask_cpu, overlap_threshold = 0.8):
@@ -105,6 +110,5 @@ for img_name in tqdm(test_imgs):
     predicted_image = np.zeros(masks_processed.shape[1:3])
     predicted_image =  combine_masks(masks_processed)
     
-    plt.imshow(predicted_image)
-    plt.savefig(os.path.join(output_folder,img_name))
+    cv2.imwrite(os.path.join(output_folder,img_name), predicted_image)
     
